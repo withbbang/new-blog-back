@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# 서버에 요청이 들어올 경우 Bread_Blog/urls.py 파일의 경로부터 분석한다.
 ROOT_URLCONF = 'Bread_Blog.urls'
 
 # DIRS 항목에 프로젝트 템플릿 파일이 위치할 폴더 지정. 템플릿 파일을 찾을 때 앱 템플릿 폴더보다 프로젝트 템플릿 폴더를 먼저 검색한다 사실 웹프레임워크를 쓸 경우 필요 없을수도.., os.path.join(BASE_DIR, 'templates')
@@ -121,6 +122,39 @@ USE_L10N = True
 # USE_TZ = True
 USE_TZ = False
 
+
+# 장고의 디폴트 설정을 유지하면서 로깅 설정
+
+# logger: 로그 메세지(로그 레코드)를 처리하기 위해 메세지를 담아두는 저장소
+# 레벨 순위 CRITICAL > ERROR > WARNING > INFO > DEBUG > NOTSET -> 높은게 있으면 낮은 메세지는 무시됨
+# 로그 레코드 lv >= 로거 lv일 경우에만 메세지 처리
+
+# handler: 로거에 있는 메세지에 무슨 작업을 할지 결정하는 엔진 -> 메세지를 화면이나 파일 혹은 네트워크 소켓 등 어디에 기록할지 로그 동작 정의
+# 로그 레코드 lv >= 핸들러 lv일 경우에만 메세지 처리
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S",
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'djangoApp.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'polls': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
